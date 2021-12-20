@@ -1,0 +1,48 @@
+{
+   "passengers":[
+       {
+          "firstName":"John",
+          "lastName":"Doe"
+       }
+   ],
+   "flights":[
+      {
+         "isCancelled": false,
+         "originName":"Paris",
+         "originCode":"CDG",
+         "destinationAirportCode":"LAX",
+         "destinationCityCode":"LAX",
+         "destinationCityName":"Los Angeles",
+         "connectionDepartureDate":"2021-08-16T13:15",
+         "connectionArrivalDate":"2021-08-16T16:00",
+         "checkInStatus":{
+            "areAllPassengersCheckedIn": true,
+            "isCheckInOpen": false
+         },
+         "segments":[
+            {
+               "isCancelled": false,
+               "origin":{
+                  "cityName":"Paris",
+                  "airportName":"Paris Charles De Gaulle Airport",
+                  "airportCode":"CDG"
+               },
+               "destination":{
+                  "cityName":"Los Angeles",
+                  "airportName":"Los Angeles Intl.",
+                  "airportCode":"LAX"
+               },
+               "flight":{
+                  "carrierName":"Air France",
+                  "duration":"705",
+                  "flightNumber":"072",
+                  "scheduledDeparture":"2021-08-16T13:15+02:00",
+                  "scheduledArrival":"2021-08-16T16:00-07:00",
+                  "departureDate":"2021-08-16T13:15",
+                  "arrivalDate":"2021-08-16T16:00"
+               }
+            }
+         ]
+      }
+   ]
+}
