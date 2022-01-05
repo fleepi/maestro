@@ -1,9 +1,15 @@
 import json
- 
+
+notfound = {
+    "message": "Sorry, we couldn't find your booking details"
+}
+
 with open('bookingScheme.json') as json_file:
     booking = json.load(json_file)
 
 def treat(response):
+    if ('errors' in response.keys()):
+        return notfound, 404
     reservation = response['data']['reservation']
     for (index, passenger) in enumerate(reservation['passengers']):
         booking['passengers'][index]['firstName'] = passenger['firstName']
