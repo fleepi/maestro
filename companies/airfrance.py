@@ -15,7 +15,7 @@ def treat(response):
         booking['passengers'][index]['firstName'] = passenger['firstName']
         booking['passengers'][index]['lastName'] = passenger['lastName']
     for (index, itinerary) in enumerate(reservation['itinerary']['connections']):
-        if (index > 0): booking['flights'].append(booking['flights'][0])
+        if (index > 0): booking['flights'].append(booking['flights'][0].copy())
         flight = booking['flights'][index]
         flight['isCancelled'] = itinerary['isCancelled']
         flight['originName'] = itinerary['originName']
@@ -28,7 +28,7 @@ def treat(response):
         flight['areAllPassengersCheckedIn'] = itinerary['checkInStatus']['areAllPassengersCheckedIn']
         flight['isCheckInOpen'] = itinerary['checkInStatus']['isCheckInOpen']
         for (indexSeg, segment) in enumerate(itinerary['segments']):
-            elem = booking['flights'][index]['segments'][indexSeg]
+            elem = flight['segments'][indexSeg]
             elem['isCancelled'] = segment['isCancelled']
             elem['origin']['cityName'] = segment['origin']['cityName']
             elem['origin']['airportName'] = segment['origin']['airportName']
