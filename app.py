@@ -1,4 +1,4 @@
-from companies import airfrance
+from companies import airfrance, sncf
 from flask import Flask, jsonify, request
 import requests
 import copy
@@ -24,6 +24,22 @@ def get_airFrance():
     # Same call but with generated cookies, AirFrance used generated specific session cookies
     response = session.post(url, data=payload, headers=headers, cookies=session.cookies.get_dict())
     return airfrance.treat(response.json())
+
+@app.route('/sncf')
+def get_sncf():
+    # TODO: .env with urls
+    url = "https://www.sncf-connect.com/bff/api/v1/trips/trips-by-criteria"
+    payload='{\n\"reference\":\"'+request.args.get('bookingCode')+'\",\"name\":\"'+request.args.get('lastName')+'\"\n}'
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36",
+        "x-bff-key": "ah1MPO-izehIHD-QZZ9y88n-kku876",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Content-Type": "application/json",
+        "Connection": "keep-alive"
+    }
+    session = requests.Session()
+    response = session.post(url, data=payload, headers=headers)
+    return sncf.treat(response)
 
 
 # ======== Main ======== #

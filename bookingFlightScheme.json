@@ -1,11 +1,12 @@
 {
+   "type":"flight",
    "passengers":[
        {
           "firstName":"John",
           "lastName":"Doe"
        }
    ],
-   "flights":[
+   "trips":[
       {
          "isCancelled": false,
          "originName":"Paris",
@@ -13,8 +14,8 @@
          "destinationAirportCode":"LAX",
          "destinationCityCode":"LAX",
          "destinationCityName":"Los Angeles",
-         "connectionDepartureDate":"2021-08-16T13:15",
-         "connectionArrivalDate":"2021-08-16T16:00",
+         "departureDateTime":"2021-08-16T13:15",
+         "arrivalDateTime":"2021-08-16T16:00",
          "checkInStatus":{
             "areAllPassengersCheckedIn": true,
             "isCheckInOpen": false

@@ -4,27 +4,27 @@ notfound = {
     "message": "Sorry, we couldn't find your booking details"
 }
 
-with open('bookingScheme.json') as json_file:
-    booking = json.load(json_file)
-
 def treat(response):
+    with open('bookingFlightScheme.json') as json_file:
+        booking = json.load(json_file)
     if ('errors' in response.keys()):
         return notfound, 404
     reservation = response['data']['reservation']
+    booking['type'] = "flight"
     for (index, passenger) in enumerate(reservation['passengers']):
         booking['passengers'][index]['firstName'] = passenger['firstName']
         booking['passengers'][index]['lastName'] = passenger['lastName']
     for (index, itinerary) in enumerate(reservation['itinerary']['connections']):
-        if (index > 0): booking['flights'].append(booking['flights'][0].copy())
-        flight = booking['flights'][index]
+        if (index > 0): booking['trips'].append(booking['trips'][0].copy())
+        flight = booking['trips'][index]
         flight['isCancelled'] = itinerary['isCancelled']
         flight['originName'] = itinerary['originName']
         flight['originCode'] = itinerary['originCode']
         flight['destinationAirportCode'] = itinerary['destinationAirportCode']
         flight['destinationCityCode'] = itinerary['destinationCityCode']
         flight['destinationCityName'] = itinerary['destinationCityName']
-        flight['connectionDepartureDate'] = itinerary['connectionDepartureDate']
-        flight['connectionArrivalDate'] = itinerary['connectionArrivalDate']
+        flight['departureDateTime'] = itinerary['connectionDepartureDate']
+        flight['arrivalDateTime'] = itinerary['connectionArrivalDate']
         flight['areAllPassengersCheckedIn'] = itinerary['checkInStatus']['areAllPassengersCheckedIn']
         flight['isCheckInOpen'] = itinerary['checkInStatus']['isCheckInOpen']
         for (indexSeg, segment) in enumerate(itinerary['segments']):

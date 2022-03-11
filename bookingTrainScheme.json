@@ -1,0 +1,18 @@
+{
+   "type":"train",
+   "trips":[
+      {
+         "duration":"1h24",
+         "departureTime":"20:20",
+         "arrivalTime":"21:03",
+         "originName":"Paris",
+         "destinationCityName":"Los Mingeles",
+         "departureDateTime":"2021-08-16T13:15",
+         "arrivalDateTime":"2021-08-16T16:00",
+         "isRoundTrip": false,
+         "routeLabel":"Aller",
+         "travellers": [
+         ]
+      }
+   ]
+}
