@@ -9,7 +9,7 @@ app = Flask(__name__)
 def get_airFrance():
     # TODO: .env with urls
     url = "https://iran.airfrance.com/gql/v1?bookingFlow=LEISURE"
-    payload='{\n\"operationName\":\"reservation\",\n\"variables\":{\"bookingCode\":\"'+request.args.get('bookingCode')+'\",\"lastName\":\"'+request.args.get('lastName')+'\"},\n\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"51076196b41d2ffe39204365bfd2bf5416f16cc9e1c6e3b5f12ecd7ea6c13d6b\"}}\n}'
+    payload='{\n\"operationName\":\"reservation\",\n\"variables\":{\"bookingCode\":\"'+request.args.get('bookingCode')+'\",\"lastName\":\"'+request.args.get('lastName')+'\"},\n\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"5862217c780db7597694b8736e2846f235c5deedcc0322e5c09b6f6ca4c8006d\"}}\n}'
     headers = {
         "language": "en",
         "country": "IR",
