@@ -2,8 +2,8 @@
    "type":"flight",
    "passengers":[
        {
-          "firstName":"John",
-          "lastName":"Doe"
+          "firstName":"Unknown",
+          "lastName":"Unknown"
        }
    ],
    "trips":[
@@ -17,8 +17,8 @@
          "departureDateTime":"2021-08-16T13:15",
          "arrivalDateTime":"2021-08-16T16:00",
          "checkInStatus":{
-            "areAllPassengersCheckedIn": true,
-            "isCheckInOpen": false
+            "areAllPassengersCheckedIn": "Unknown",
+            "isCheckInOpen": "Unknown"
          },
          "segments":[
             {
@@ -35,7 +35,7 @@
                },
                "flight":{
                   "carrierName":"Air France",
-                  "duration":"705",
+                  "duration":"Unknown",
                   "flightNumber":"072",
                   "scheduledDeparture":"2021-08-16T13:15+02:00",
                   "scheduledArrival":"2021-08-16T16:00-07:00",

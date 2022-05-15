@@ -1,7 +1,8 @@
-from companies import airfrance, sncf
+from companies import airfrance, sncf, other
 from flask import Flask, jsonify, request
 import requests
 import copy
+import os
 
 app = Flask(__name__)
 
@@ -40,6 +41,20 @@ def get_sncf():
     session = requests.Session()
     response = session.post(url, data=payload, headers=headers)
     return sncf.treat(response)
+
+@app.route('/other')
+def get_other():
+    # TODO: .env with urls
+    url = "https://app.goflightlabs.com/flights?access_key={}&flight_iata={}&arr_scheduled_time_dep={}".format(os.environ['GOFLIGHT_KEY'], request.args.get('flightNumber'), request.args.get('departureDate'))
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Content-Type": "application/json",
+        "Connection": "keep-alive"
+    }
+    session = requests.Session()
+    response = session.get(url, headers=headers)
+    return other.treat(response)
 
 
 # ======== Main ======== #
