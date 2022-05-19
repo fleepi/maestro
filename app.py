@@ -20,6 +20,7 @@ def get_airFrance():
         "Connection": "keep-alive"
     }
     session = requests.Session()
+    print("INFO: Flight data requested for AirFrance company with PNR: ", request.args.get('bookingCode'))
     # Getting cookies
     response = session.post(url, data=payload, headers=headers)
     # Same call but with generated cookies, AirFrance used generated specific session cookies
@@ -39,6 +40,7 @@ def get_sncf():
         "Connection": "keep-alive"
     }
     session = requests.Session()
+    print("INFO: Train data requested for SNCF company with PNR: ", request.args.get('bookingCode'))
     response = session.post(url, data=payload, headers=headers)
     return sncf.treat(response)
 
@@ -53,10 +55,14 @@ def get_other():
         "Connection": "keep-alive"
     }
     session = requests.Session()
+    print("INFO: Flight data requested for other company with flight number: ", request.args.get('flightNumber'))
     response = session.get(url, headers=headers)
     return other.treat(response)
 
 
 # ======== Main ======== #
 if __name__ == '__main__':
+    print("--------------------------------")
+    print("   MAESTRO SERVER HAS STARTED   ")
+    print("--------------------------------")
     app.run(debug=True, use_reloader=True, threaded=True)

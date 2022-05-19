@@ -8,6 +8,7 @@ def treat(response):
     with open('bookingFlightScheme.json') as json_file:
         booking = json.load(json_file)
     if ('success' in response.json()):
+        print("WARNING: Goflight return a non-success response")
         return notfound, 404
     reservation = response.json()[0]
     booking['type'] = "flight"
