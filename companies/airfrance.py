@@ -7,7 +7,7 @@ notfound = {
 def treat(response):
     with open('bookingFlightScheme.json') as json_file:
         booking = json.load(json_file)
-    if ('errors' in response.keys()):
+    if ('errors' in response.keys() or response == notfound):
         print("WARNING: AirFrance return a non-success response")
         return notfound, 404
     reservation = response['data']['reservation']
