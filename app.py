@@ -1,4 +1,4 @@
-from companies import airfrance, sncf, other
+from companies import airfrance, condor, sncf, other
 from flask import Flask, jsonify, request
 import requests
 import copy
@@ -67,6 +67,30 @@ def get_sncf():
     print("INFO: Train data requested for SNCF company with PNR: ", request.args.get('bookingCode'))
     response = session.post(url, data=payload, headers=headers)
     return sncf.treat(response)
+
+@app.route('/condor')
+def get_condor():
+    # TODO: .env with urls
+    url = "https://api.condor.com/api/booking/v0/bookings?bookingReference={}&lastName={}&departureDate={}".format(request.args.get('bookingCode'), request.args.get('lastName'), request.args.get('departureDate'))
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Content-Type": "application/json",
+        "Connection": "keep-alive"
+    }
+    session = CachedSession(
+        'condor_cache',
+        use_cache_dir=True,
+        cache_control=False,
+        expire_after=timedelta(seconds=120),
+        allowable_methods=['GET', 'POST'],
+        allowable_codes=[200, 400, 404],
+        match_headers=True,
+        stale_if_error=True,
+    )
+    print("INFO: Train data requested for CONDOR company with PNR: ", request.args.get('bookingCode'))
+    response = session.get(url, headers=headers)
+    return condor.treat(response.json())
 
 @app.route('/other')
 def get_other():
