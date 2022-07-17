@@ -7,9 +7,13 @@ notfound = {
 def treat(response):
     with open('bookingTrainScheme.json') as json_file:
         booking = json.load(json_file)
-    if (response.status_code == 500):
-        print("WARNING: SNCF return a non-success response")
+    if (response.status_code == 404):
+        print("WARNING: SNCF return a non-found response")
         return notfound, 404
+    if (response.status_code == 409):
+        print("WARNING: SNCF return that the booking has been cancelled")
+        return notfound, 409
+    print(response.status_code)
     reservation = response.json()['response']
     booking['type'] = "train"
     for (index, itinerary) in enumerate(reservation['trips']):
