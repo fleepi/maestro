@@ -1,5 +1,6 @@
 from companies import airfrance, condor, sncf, other
 from flask import Flask, jsonify, request
+import json
 import requests
 import copy
 import os
@@ -11,8 +12,14 @@ app = Flask(__name__)
 # ~~ MESSAGES ~~
 error_500 = {"message": "Maestro Internal Server Error"}
 
+bookingCodeDemo = 'FLEEPI'
+
 @app.route('/airfrance')
 def get_airFrance():
+    # Detect demo and return mock
+    if (request.args.get('bookingCode') == bookingCodeDemo):
+        with open('mocks/airfrance.json') as json_file:
+            return json.load(json_file)
     # TODO: .env with urls
     url = "https://iran.airfrance.com/gql/v1?bookingFlow=LEISURE"
     payload='{\n\"operationName\":\"reservation\",\n\"variables\":{\"bookingCode\":\"'+request.args.get('bookingCode')+'\",\"lastName\":\"'+request.args.get('lastName')+'\"},\n\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"5862217c780db7597694b8736e2846f235c5deedcc0322e5c09b6f6ca4c8006d\"}}\n}'

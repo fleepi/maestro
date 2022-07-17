@@ -1,0 +1,49 @@
+{
+    "type":"flight",
+    "passengers":[
+        {
+           "firstName":"John",
+           "lastName":"Doe"
+        }
+    ],
+    "trips":[
+       {
+          "isCancelled": false,
+          "originName":"Paris",
+          "originCode":"CDG",
+          "destinationAirportCode":"LAX",
+          "destinationCityCode":"LAX",
+          "destinationCityName":"Los Angeles",
+          "departureDateTime":"2022-10-16T13:15",
+          "arrivalDateTime":"2022-10-16T16:00",
+          "checkInStatus":{
+             "areAllPassengersCheckedIn": true,
+             "isCheckInOpen": false
+          },
+          "segments":[
+             {
+                "isCancelled": false,
+                "origin":{
+                   "cityName":"Paris",
+                   "airportName":"Paris Charles De Gaulle Airport",
+                   "airportCode":"CDG"
+                },
+                "destination":{
+                   "cityName":"Los Angeles",
+                   "airportName":"Los Angeles Intl.",
+                   "airportCode":"LAX"
+                },
+                "flight":{
+                   "carrierName":"Air France",
+                   "duration":"11h",
+                   "flightNumber":"072",
+                   "scheduledDeparture":"2022-10-16T13:15+02:00",
+                   "scheduledArrival":"2022-10-16T16:00-07:00",
+                   "departureDate":"2022-10-16T13:15",
+                   "arrivalDate":"2022-10-16T16:00"
+                }
+             }
+          ]
+       }
+    ]
+ }
