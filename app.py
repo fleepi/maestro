@@ -11,18 +11,24 @@ app = Flask(__name__)
 
 # ~~ MESSAGES ~~
 error_500 = {"message": "Maestro Internal Server Error"}
+error_400 = {"message": "Bad Request - Missing parameters"}
 
 bookingCodeDemo = 'FLEEPI'
 
 @app.route('/airfrance')
 def get_airFrance():
+    bookingCodeParam = request.args.get("bookingCode")
+    lastNameParam = request.args.get("lastName")
+    # Check parameters
+    if bookingCodeParam is None or lastNameParam is None:
+        return error_400, 400
     # Detect demo and return mock
-    if (request.args.get('bookingCode') == bookingCodeDemo):
+    if (bookingCodeParam == bookingCodeDemo):
         with open('mocks/airfrance.json') as json_file:
             return json.load(json_file)
     # TODO: .env with urls
     url = "https://iran.airfrance.com/gql/v1?bookingFlow=LEISURE"
-    payload='{\n\"operationName\":\"reservation\",\n\"variables\":{\"bookingCode\":\"'+request.args.get('bookingCode')+'\",\"lastName\":\"'+request.args.get('lastName')+'\"},\n\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"5862217c780db7597694b8736e2846f235c5deedcc0322e5c09b6f6ca4c8006d\"}}\n}'
+    payload='{\n\"operationName\":\"reservation\",\n\"variables\":{\"bookingCode\":\"'+bookingCodeParam+'\",\"lastName\":\"'+lastNameParam+'\"},\n\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"5862217c780db7597694b8736e2846f235c5deedcc0322e5c09b6f6ca4c8006d\"}}\n}'
     headers = {
         "language": "en",
         "country": "IR",
@@ -32,7 +38,7 @@ def get_airFrance():
         "Connection": "keep-alive"
     }
     session = requests.Session()
-    print("INFO: Flight data requested for AirFrance company with PNR: ", request.args.get('bookingCode'))
+    print("INFO: Flight data requested for AirFrance company with PNR: ", bookingCodeParam)
     # Getting cookies
     session.post(url, data=payload, headers=headers)
     session_cached = CachedSession(
@@ -51,9 +57,14 @@ def get_airFrance():
 
 @app.route('/sncf')
 def get_sncf():
+    bookingCodeParam = request.args.get("bookingCode")
+    lastNameParam = request.args.get("lastName")
+    # Check parameters
+    if bookingCodeParam is None or lastNameParam is None:
+        return error_400, 400
     # TODO: .env with urls
     url = "https://www.sncf-connect.com/bff/api/v1/trips/trips-by-criteria"
-    payload='{\n\"reference\":\"'+request.args.get('bookingCode')+'\",\"name\":\"'+request.args.get('lastName')+'\"\n}'
+    payload='{\n\"reference\":\"'+bookingCodeParam+'\",\"name\":\"'+lastNameParam+'\"\n}'
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36",
         "x-bff-key": "ah1MPO-izehIHD-QZZ9y88n-kku876",
@@ -71,14 +82,20 @@ def get_sncf():
         match_headers=True,
         stale_if_error=True,
     )
-    print("INFO: Train data requested for SNCF company with PNR: ", request.args.get('bookingCode'))
+    print("INFO: Train data requested for SNCF company with PNR: ", bookingCodeParam)
     response = session.post(url, data=payload, headers=headers)
     return sncf.treat(response)
 
 @app.route('/condor')
 def get_condor():
+    bookingCodeParam = request.args.get("bookingCode")
+    lastNameParam = request.args.get("lastName")
+    departureDateParam = request.args.get("departureDate")
+    # Check parameters
+    if bookingCodeParam is None or lastNameParam is None or departureDateParam is None:
+        return error_400, 400
     # TODO: .env with urls
-    url = "https://api.condor.com/api/booking/v0/bookings?bookingReference={}&lastName={}&departureDate={}".format(request.args.get('bookingCode'), request.args.get('lastName'), request.args.get('departureDate'))
+    url = "https://api.condor.com/api/booking/v0/bookings?bookingReference={}&lastName={}&departureDate={}".format(bookingCodeParam, lastNameParam, departureDateParam)
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36",
         "Accept-Encoding": "gzip, deflate, br",
@@ -95,17 +112,22 @@ def get_condor():
         match_headers=True,
         stale_if_error=True,
     )
-    print("INFO: Train data requested for CONDOR company with PNR: ", request.args.get('bookingCode'))
+    print("INFO: Train data requested for CONDOR company with PNR: ", bookingCodeParam)
     response = session.get(url, headers=headers)
     return condor.treat(response.json())
 
 @app.route('/other')
 def get_other():
+    flightNumberParam = request.args.get("flightNumber")
+    departureDateParam = request.args.get("departureDate")
+    # Check parameters
+    if flightNumberParam is None or departureDateParam is None:
+        return error_400, 400
     # TODO: .env with urls
     if "GOFLIGHT_KEY" not in os.environ:
         print("ERROR: Missing 'GOFLIGHT_KEY' env var")
         return error_500, 500
-    url = "https://app.goflightlabs.com/flights?access_key={}&flight_iata={}&arr_scheduled_time_dep={}".format(os.environ['GOFLIGHT_KEY'], request.args.get('flightNumber'), request.args.get('departureDate'))
+    url = "https://app.goflightlabs.com/flights?access_key={}&flight_iata={}&arr_scheduled_time_dep={}".format(os.environ['GOFLIGHT_KEY'], flightNumberParam, departureDateParam)
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36",
         "Accept-Encoding": "gzip, deflate, br",
@@ -122,7 +144,7 @@ def get_other():
         match_headers=True,
         stale_if_error=True,
     )
-    print("INFO: Flight data requested for other company with flight number: ", request.args.get('flightNumber'))
+    print("INFO: Flight data requested for other company with flight number: ", flightNumberParam)
     response = session.get(url, headers=headers)
     return other.treat(response)
 
