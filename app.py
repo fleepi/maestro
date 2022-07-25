@@ -1,4 +1,4 @@
-from companies import airfrance, condor, sncf, other
+from companies import airfrance, klm, condor, sncf, other
 from flask import Flask, jsonify, request
 import json
 import requests
@@ -40,7 +40,7 @@ def get_airFrance():
     session = requests.Session()
     print("INFO: Flight data requested for AirFrance company with PNR: ", bookingCodeParam)
     # Getting cookies
-    session.post(url, data=payload, headers=headers)
+    session.get("https://wwws.airfrance.fr/trip", headers=headers)
     session_cached = CachedSession(
         'af_cache',
         use_cache_dir=True,
@@ -54,6 +54,41 @@ def get_airFrance():
     # Same call but with generated cookies, AirFrance used generated specific session cookies
     response = session_cached.post(url, data=payload, headers=headers, cookies=session.cookies.get_dict())
     return airfrance.treat(response.json())
+
+@app.route('/klm')
+def get_klm():
+    bookingCodeParam = request.args.get("bookingCode")
+    lastNameParam = request.args.get("lastName")
+    # Check parameters
+    if bookingCodeParam is None or lastNameParam is None:
+        return error_400, 400
+    # TODO: .env with urls
+    url = "https://www.klm.fr/gql/v1?bookingFlow=LEISURE"
+    payload='{\n\"operationName\":\"reservation\",\n\"variables\":{\"bookingCode\":\"'+bookingCodeParam+'\",\"lastName\":\"'+lastNameParam+'\"},\n\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"7b914f0ba09f21c67523b5fa480a86cd92dd94b0113aef156337d6715a095d91\"}}\n}'
+    headers = {
+        "accept-language": "en-GB",
+        "Accept-Encoding": "gzip, deflate, br",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36",
+        "Content-Type": "application/json",
+        "Connection": "keep-alive"
+    }
+    session = requests.Session()
+    print("INFO: Flight data requested for KLM company with PNR: ", bookingCodeParam)
+    # Getting cookies
+    session.get("https://www.klm.fr/en/trip", headers=headers)
+    session_cached = CachedSession(
+        'klm_cache',
+        use_cache_dir=True,
+        cache_control=False,
+        expire_after=timedelta(seconds=120),
+        allowable_methods=['GET', 'POST'],
+        allowable_codes=[200, 400, 404],
+        match_headers=False,
+        stale_if_error=True,
+    )
+    # Same call but with generated cookies, KLM used generated specific session cookies
+    response = session_cached.post(url, data=payload, headers=headers, cookies=session.cookies.get_dict())
+    return klm.treat(response.json())
 
 @app.route('/sncf')
 def get_sncf():
