@@ -9,7 +9,7 @@ from requests_cache import CachedSession
 
 app = Flask(__name__)
 
-# ~~ ERROR MESSAGES ~~
+# ~~ MESSAGES ~~
 error_500 = {"message": "Maestro Internal Server Error"}
 error_400 = {"message": "Bad Request - Missing parameters"}
 
