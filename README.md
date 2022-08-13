@@ -1,7 +1,7 @@
 # maestro beta
 Maestro is a Python Flask API which can retrieve a booking data from any flight or train company in the world.
 
-* Currently supporting Air France for planes
+* Currently supporting Air France, KLM and Condor for planes
 * Currently supporting SNCF for trains
 * Possibility to get real time data with flight number thanks to Goflight API
 
