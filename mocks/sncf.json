@@ -1,0 +1,18 @@
+{
+    "type":"train",
+    "trips":[
+       {
+          "duration":"1h45",
+          "departureTime":"13:15",
+          "arrivalTime":"15:00",
+          "originName":"Metz",
+          "destinationCityName":"Paris",
+          "departureDateTime":"2022-12-16T13:15",
+          "arrivalDateTime":"2022-12-16T15:00",
+          "isRoundTrip": false,
+          "routeLabel":"Aller",
+          "travellers": [
+          ]
+       }
+    ]
+ }
