@@ -12,6 +12,10 @@
           "isRoundTrip": false,
           "routeLabel":"Aller",
           "travellers": [
+            {
+               "firstName": "John",
+               "lastName": "Doe"
+            }
           ]
        }
     ]
