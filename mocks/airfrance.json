@@ -2,8 +2,8 @@
     "type":"flight",
     "passengers":[
         {
-           "firstName":"John",
-           "lastName":"Doe"
+           "firstName":"Arthur",
+           "lastName":"Mariet"
         }
     ],
     "trips":[
