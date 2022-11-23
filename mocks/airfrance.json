@@ -14,8 +14,8 @@
           "destinationAirportCode":"LAX",
           "destinationCityCode":"LAX",
           "destinationCityName":"Los Angeles",
-          "departureDateTime":"2022-10-30T13:15",
-          "arrivalDateTime":"2022-10-30T16:00",
+          "departureDateTime":"2022-12-30T13:15",
+          "arrivalDateTime":"2022-12-30T16:00",
           "checkInStatus":{
              "areAllPassengersCheckedIn": true,
              "isCheckInOpen": false
@@ -37,10 +37,10 @@
                    "carrierName":"Air France",
                    "duration":"11h",
                    "flightNumber":"072",
-                   "scheduledDeparture":"2022-10-30T13:15+02:00",
-                   "scheduledArrival":"2022-10-30T16:00-07:00",
-                   "departureDate":"2022-10-30T13:15",
-                   "arrivalDate":"2022-10-30T16:00"
+                   "scheduledDeparture":"2022-12-30T13:15+02:00",
+                   "scheduledArrival":"2022-12-30T16:00-07:00",
+                   "departureDate":"2022-12-30T13:15",
+                   "arrivalDate":"2022-12-30T16:00"
                 }
              }
           ]
