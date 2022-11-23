@@ -1,4 +1,4 @@
-from companies import airfrance, klm, condor, sncf, other
+from companies import airfrance, klm, condor, sncf, delta, other
 from flask import Flask, jsonify, request
 import json
 import requests
@@ -92,36 +92,60 @@ def get_klm():
 
 @app.route('/sncf')
 def get_sncf():
-    # bookingCodeParam = request.args.get("bookingCode")
-    # lastNameParam = request.args.get("lastName")
-    # # Check parameters
-    # if bookingCodeParam is None or lastNameParam is None:
-    #     return error_400, 400
-    # # TODO: .env with urls
-    # url = "https://www.sncf-connect.com/bff/api/v1/trips/trips-by-criteria"
-    # payload='{\n\"reference\":\"'+bookingCodeParam+'\",\"name\":\"'+lastNameParam+'\"\n}'
-    # headers = {
-    #     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36",
-    #     "x-bff-key": "ah1MPO-izehIHD-QZZ9y88n-kku876",
-    #     "Accept-Encoding": "gzip, deflate, br",
-    #     "Content-Type": "application/json",
-    #     "Connection": "keep-alive"
-    # }
-    # session = CachedSession(
-    #     'sncf_cache',
-    #     use_cache_dir=True,
-    #     cache_control=False,
-    #     expire_after=timedelta(seconds=180),
-    #     allowable_methods=['GET', 'POST'],
-    #     allowable_codes=[200, 400, 404],
-    #     match_headers=True,
-    #     stale_if_error=True,
-    # )
-    # print("INFO: Train data requested for SNCF company with PNR: ", bookingCodeParam)
-    # response = session.post(url, data=payload, headers=headers)
-    # return sncf.treat(response)
+    bookingCodeParam = request.args.get("bookingCode")
+    lastNameParam = request.args.get("lastName")
+    # Check parameters
+    if bookingCodeParam is None or lastNameParam is None:
+        return error_400, 400
+    # TODO: .env with urls
+    url = "http://www.sncf-connect.com/bff/api/v1/trips/trips-by-criteria"
+    payload='{\n\"reference\":\"'+bookingCodeParam+'\",\"name\":\"'+lastNameParam+'\"\n}'
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36",
+        "x-bff-key": "ah1MPO-izehIHD-QZZ9y88n-kku876",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Content-Type": "application/json",
+        "Connection": "keep-alive"
+    }
+    session = CachedSession(
+        'sncf_cache',
+        use_cache_dir=True,
+        cache_control=False,
+        expire_after=timedelta(seconds=180),
+        allowable_methods=['GET', 'POST'],
+        allowable_codes=[200, 400, 404],
+        match_headers=True,
+        stale_if_error=True,
+    )
+    print("INFO: Train data requested for SNCF company with PNR: ", bookingCodeParam)
+    response = session.post(url, data=payload, headers=headers)
+    return sncf.treat(response)
     with open('mocks/sncf.json') as json_file:
         return json.load(json_file)
+
+@app.route('/delta')
+def get_delta():
+    bookingCodeParam = request.args.get("bookingCode")
+    lastNameParam = request.args.get("lastName")
+    # Check parameters
+    if bookingCodeParam is None or lastNameParam is None:
+        return error_400, 400
+    # TODO: .env with urls
+    url = "http://delta.com/api/v2/trips/"
+    payload='{\n\"operationName\":\"reservation\",\n\"variables\":{\"bookingCode\":\"'+bookingCodeParam+'\",\"lastName\":\"'+lastNameParam+'\"},\n\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"5862217c780db7597694b8736e2846f235c5deedcc0322e5c09b6f6ca4c8006d\"}}\n}'
+    headers = {
+        "language": "en",
+        "country": "FR",
+        "Accept-Encoding": "gzip, deflate, br",
+        "User-Agent": "PostmanRuntime/7.26.8",
+        "Content-Type": "application/json",
+        "Connection": "keep-alive"
+    }
+    session = requests.Session()
+    print("INFO: Flight data requested for DELTA company with PNR: ", bookingCodeParam)
+    # Getting cookies
+    response = session.post(url, headers=headers, data=payload)
+    return delta.treat(response.json())
 
 @app.route('/condor')
 def get_condor():
