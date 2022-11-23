@@ -97,6 +97,9 @@ def get_sncf():
     # Check parameters
     if bookingCodeParam is None or lastNameParam is None:
         return error_400, 400
+    if (bookingCodeParam == bookingCodeDemo):
+        with open('mocks/sncf.json') as json_file:
+            return json.load(json_file)
     # TODO: .env with urls
     url = "http://www.sncf-connect.com/bff/api/v1/trips/trips-by-criteria"
     payload='{\n\"reference\":\"'+bookingCodeParam+'\",\"name\":\"'+lastNameParam+'\"\n}'
@@ -120,8 +123,6 @@ def get_sncf():
     print("INFO: Train data requested for SNCF company with PNR: ", bookingCodeParam)
     response = session.post(url, data=payload, headers=headers)
     return sncf.treat(response)
-    with open('mocks/sncf.json') as json_file:
-        return json.load(json_file)
 
 @app.route('/delta')
 def get_delta():
