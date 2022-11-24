@@ -30,6 +30,8 @@ def treat(response):
         flight['areAllPassengersCheckedIn'] = itinerary['checkInStatus']['areAllPassengersCheckedIn']
         flight['isCheckInOpen'] = itinerary['checkInStatus']['isCheckInOpen']
         for (indexSeg, segment) in enumerate(itinerary['segments']):
+            if indexSeg > 0:
+                flight['segments'].append(flight['segments'][0].copy())
             elem = flight['segments'][indexSeg]
             elem['isCancelled'] = segment['isCancelled']
             elem['origin']['cityName'] = segment['origin']['cityName']
