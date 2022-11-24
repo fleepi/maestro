@@ -17,6 +17,8 @@ bookingCodeDemo = 'FLEEPI'
 
 @app.route('/airfrance')
 def get_airFrance():
+    if "AF_URL" not in os.environ:
+        print("ERROR: Missing 'AF_URL' env var")
     bookingCodeParam = request.args.get("bookingCode")
     lastNameParam = request.args.get("lastName")
     # Check parameters
@@ -26,8 +28,7 @@ def get_airFrance():
     if (bookingCodeParam == bookingCodeDemo):
         with open('mocks/airfrance.json') as json_file:
             return json.load(json_file)
-    # TODO: .env with urls
-    url = "https://iran.airfrance.com/gql/v1?bookingFlow=LEISURE"
+    url = os.environ['AF_URL']
     payload='{\n\"operationName\":\"reservation\",\n\"variables\":{\"bookingCode\":\"'+bookingCodeParam+'\",\"lastName\":\"'+lastNameParam+'\"},\n\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"5862217c780db7597694b8736e2846f235c5deedcc0322e5c09b6f6ca4c8006d\"}}\n}'
     headers = {
         "language": "en",
@@ -57,13 +58,14 @@ def get_airFrance():
 
 @app.route('/klm')
 def get_klm():
+    if "KLM_URL" not in os.environ:
+        print("ERROR: Missing 'KLM_URL' env var")
     bookingCodeParam = request.args.get("bookingCode")
     lastNameParam = request.args.get("lastName")
     # Check parameters
     if bookingCodeParam is None or lastNameParam is None:
         return error_400, 400
-    # TODO: .env with urls
-    url = "https://www.klm.fr/gql/v1?bookingFlow=LEISURE"
+    url = os.environ['KLM_URL']
     payload='{\n\"operationName\":\"reservation\",\n\"variables\":{\"bookingCode\":\"'+bookingCodeParam+'\",\"lastName\":\"'+lastNameParam+'\"},\n\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"7b914f0ba09f21c67523b5fa480a86cd92dd94b0113aef156337d6715a095d91\"}}\n}'
     headers = {
         "accept-language": "en-GB",
@@ -92,6 +94,8 @@ def get_klm():
 
 @app.route('/sncf')
 def get_sncf():
+    if "SNCF_URL" not in os.environ:
+        print("ERROR: Missing 'SNCF_URL' env var")
     bookingCodeParam = request.args.get("bookingCode")
     lastNameParam = request.args.get("lastName")
     # Check parameters
@@ -100,8 +104,7 @@ def get_sncf():
     if (bookingCodeParam == bookingCodeDemo):
         with open('mocks/sncf.json') as json_file:
             return json.load(json_file)
-    # TODO: .env with urls
-    url = "http://www.sncf-connect.com/bff/api/v1/trips/trips-by-criteria"
+    url = os.environ['SNCF_URL']
     payload='{\n\"reference\":\"'+bookingCodeParam+'\",\"name\":\"'+lastNameParam+'\"\n}'
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36",
@@ -126,13 +129,14 @@ def get_sncf():
 
 @app.route('/delta')
 def get_delta():
+    if "DELTA_URL" not in os.environ:
+        print("ERROR: Missing 'DELTA_URL' env var")
     bookingCodeParam = request.args.get("bookingCode")
     lastNameParam = request.args.get("lastName")
     # Check parameters
     if bookingCodeParam is None or lastNameParam is None:
         return error_400, 400
-    # TODO: .env with urls
-    url = "http://delta.com/api/v2/trips/"
+    url = os.environ['DELTA_URL']
     payload='{\n\"operationName\":\"reservation\",\n\"variables\":{\"bookingCode\":\"'+bookingCodeParam+'\",\"lastName\":\"'+lastNameParam+'\"},\n\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"5862217c780db7597694b8736e2846f235c5deedcc0322e5c09b6f6ca4c8006d\"}}\n}'
     headers = {
         "language": "en",
@@ -185,7 +189,6 @@ def get_other():
     # Check parameters
     if flightNumberParam is None or departureDateParam is None:
         return error_400, 400
-    # TODO: .env with urls
     if "GOFLIGHT_KEY" not in os.environ:
         print("ERROR: Missing 'GOFLIGHT_KEY' env var")
         return error_500, 500
